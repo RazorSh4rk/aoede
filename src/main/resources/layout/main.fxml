@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) 2017, Gluon and/or its affiliates.
+    All rights reserved. Use is subject to license terms.
+
+    This file is available and licensed under the following license:
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+   - Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+   - Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
+     the documentation and/or other materials provided with the distribution.
+   - Neither the name of Oracle Corporation and Gluon nor the names of its
+     contributors may be used to endorse or promote products derived
+     from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="480.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.UIController">
+   <children>
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="480.0" prefWidth="320.0" style="-fx-background-color: #191414;">
+         <center>
+            <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER" minWidth="200.0" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="albumart" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/sound-waves.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Label fx:id="title" alignment="CENTER" prefWidth="200.0" text="Title" textAlignment="CENTER" textFill="#1ed760">
+                           <font>
+                              <Font name="Droid Sans Mono" size="22.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="artist" alignment="CENTER" layoutX="72.0" layoutY="306.0" prefWidth="200.0" text="Artist" textAlignment="CENTER" textFill="#1ed760">
+                           <font>
+                              <Font name="Droid Sans Mono" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="album" alignment="CENTER" layoutX="72.0" layoutY="315.0" prefWidth="200.0" text="Album" textAlignment="CENTER" textFill="#1ed760">
+                           <font>
+                              <Font name="Droid Sans Mono" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <opaqueInsets>
+                  <Insets top="25.0" />
+               </opaqueInsets>
+            </HBox>
+         </center>
+         <opaqueInsets>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </opaqueInsets>
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="prevButton" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#prevButtonClicked" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/previous-button.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="playButton" fitHeight="100.0" fitWidth="100.0" layoutX="118.0" layoutY="10.0" onMouseClicked="#playButtonClicked" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/play-button.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="nextButton" fitHeight="80.0" fitWidth="80.0" layoutX="173.0" layoutY="10.0" onMouseClicked="#nextButtonClicked" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/next-button.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </bottom>
+         <top>
+            <HBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER">
+               <children>
+                  <SVGPath fx:id="menuButton" content="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" fill="#1db954" onMouseClicked="#menuButtonClicked" stroke="#faeded00" strokeType="OUTSIDE" />
+               </children>
+               <opaqueInsets>
+                  <Insets left="10.0" top="10.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </top>
+         <left>
+            <HBox alignment="BOTTOM_CENTER" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="volumeUpButton" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#volumeUpButtonClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/speaker.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </left>
+         <right>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="volumeDownButton" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#volumeDownButtonClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/speaker-off.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </right>
+      </BorderPane>
+      <BorderPane fx:id="menuPage" prefHeight="480.0" prefWidth="320.0" style="-fx-background-color: #191414;" visible="false">
+         <top>
+            <HBox alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="hideMenuButton" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#hideMenuButtonCLicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/cancel.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <BorderPane.margin>
+                  <Insets right="10.0" top="10.0" />
+               </BorderPane.margin>
+            </HBox>
+         </top>
+         <center>
+            <ListView fx:id="playlistList" prefHeight="400.0" prefWidth="240.0" style="-fx-background-color: #191414;" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </children>
+</Pane>
