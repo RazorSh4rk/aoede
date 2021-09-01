@@ -21,7 +21,7 @@ class UIController(
 
     private val menuPage: BorderPane,
     private val playlistList: ListView[Label],
-    private val playButton: ImageView
+    private val playButton: ImageView,
 ) {
     val pauseImage = new Image("images/pause-button.png")
     val playImage = new Image("images/play-button.png")

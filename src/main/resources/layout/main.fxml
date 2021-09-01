@@ -35,6 +35,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -50,31 +52,50 @@
          <center>
             <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="CENTER" minWidth="200.0" prefHeight="200.0" prefWidth="200.0">
+                  <VBox alignment="TOP_CENTER" minWidth="200.0" prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="albumart" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/sound-waves.png" />
                            </image>
                            <VBox.margin>
-                              <Insets bottom="10.0" />
+                              <Insets />
                            </VBox.margin>
+                           <effect>
+                              <Reflection fraction="0.6" topOffset="1.0" topOpacity="0.2" />
+                           </effect>
                         </ImageView>
-                        <Label fx:id="title" alignment="CENTER" prefWidth="200.0" text="Title" textAlignment="CENTER" textFill="#1ed760">
-                           <font>
-                              <Font name="Droid Sans Mono" size="22.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="artist" alignment="CENTER" layoutX="72.0" layoutY="306.0" prefWidth="200.0" text="Artist" textAlignment="CENTER" textFill="#1ed760">
-                           <font>
-                              <Font name="Droid Sans Mono" size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="album" alignment="CENTER" layoutX="72.0" layoutY="315.0" prefWidth="200.0" text="Album" textAlignment="CENTER" textFill="#1ed760">
-                           <font>
-                              <Font name="Droid Sans Mono" size="14.0" />
-                           </font>
-                        </Label>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="80.0">
+                           <children>
+                              <Label fx:id="title" alignment="CENTER" prefWidth="200.0" text="Title" textAlignment="CENTER" textFill="#1ed760">
+                                 <font>
+                                    <Font name="Droid Sans Mono" size="22.0" />
+                                 </font>
+                                 <effect>
+                                    <Bloom />
+                                 </effect>
+                              </Label>
+                              <Label fx:id="artist" alignment="CENTER" prefWidth="200.0" text="Artist" textAlignment="CENTER" textFill="#1ed760">
+                                 <font>
+                                    <Font name="Droid Sans Mono" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <Bloom />
+                                 </effect>
+                              </Label>
+                              <Label fx:id="album" alignment="CENTER" prefWidth="200.0" text="Album" textAlignment="CENTER" textFill="#1ed760">
+                                 <font>
+                                    <Font name="Droid Sans Mono" size="14.0" />
+                                 </font>
+                                 <effect>
+                                    <Bloom />
+                                 </effect>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="80.0" />
+                           </VBox.margin>
+                        </VBox>
                      </children>
                   </VBox>
                </children>
@@ -96,6 +117,9 @@
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
+                     <effect>
+                        <Bloom />
+                     </effect>
                   </ImageView>
                   <ImageView fx:id="playButton" fitHeight="100.0" fitWidth="100.0" layoutX="118.0" layoutY="10.0" onMouseClicked="#playButtonClicked" pickOnBounds="true">
                      <image>
@@ -104,11 +128,17 @@
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
+                     <effect>
+                        <Bloom />
+                     </effect>
                   </ImageView>
                   <ImageView fx:id="nextButton" fitHeight="80.0" fitWidth="80.0" layoutX="173.0" layoutY="10.0" onMouseClicked="#nextButtonClicked" pickOnBounds="true">
                      <image>
                         <Image url="@../images/next-button.png" />
                      </image>
+                     <effect>
+                        <Bloom />
+                     </effect>
                   </ImageView>
                </children>
             </HBox>
@@ -116,7 +146,10 @@
          <top>
             <HBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER">
                <children>
-                  <SVGPath fx:id="menuButton" content="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" fill="#1db954" onMouseClicked="#menuButtonClicked" stroke="#faeded00" strokeType="OUTSIDE" />
+                  <SVGPath fx:id="menuButton" content="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" fill="#1db954" onMouseClicked="#menuButtonClicked" stroke="#faeded00" strokeType="OUTSIDE">
+                     <effect>
+                        <Bloom />
+                     </effect></SVGPath>
                </children>
                <opaqueInsets>
                   <Insets left="10.0" top="10.0" />
@@ -133,6 +166,9 @@
                      <image>
                         <Image url="@../images/speaker.png" />
                      </image>
+                     <effect>
+                        <Bloom />
+                     </effect>
                   </ImageView>
                </children>
             </HBox>
@@ -144,6 +180,9 @@
                      <image>
                         <Image url="@../images/speaker-off.png" />
                      </image>
+                     <effect>
+                        <Bloom />
+                     </effect>
                   </ImageView>
                </children>
             </HBox>

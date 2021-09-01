@@ -13,6 +13,9 @@ object Main extends JFXApp{
   // fx:controller="main.UIController"
   val settings = Settings.load
 
+  if(settings.localServer)
+    Server.start
+ 
   val view = getClass().getClassLoader().getResource("layout/main.fxml")
   val controller = new UIController(null)
   val root = FXMLView(view, new DependenciesByType(Map(

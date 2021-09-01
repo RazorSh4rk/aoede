@@ -15,7 +15,9 @@ case class Settings(
     val clientSecret: String,
     val redirectUrl: String,
     val authCode: String,
-    val borderless: Boolean
+    val borderless: Boolean,
+    val volumeSteps: Int,
+    val localServer: Boolean
 )
 
 object Settings {
@@ -30,7 +32,9 @@ object Settings {
             props.getProperty("client-secret"),
             props.getProperty("redirect-url"),
             props.getProperty("authorization-code"),
-            props.getProperty("borderless").toBoolean
+            props.getProperty("borderless").toBoolean,
+            props.getProperty("volume-steps").toInt,
+            props.getProperty("local-server").toBoolean
         )
     }
     def update(key: String, value: String) = {

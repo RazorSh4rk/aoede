@@ -6,6 +6,7 @@ version := "1.0"
 
 libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R24"
 libraryDependencies += "se.michaelthelin.spotify" % "spotify-web-api-java" % "6.5.4"
+libraryDependencies += "io.undertow" % "undertow-core" % "2.2.10.Final"
 
 lazy val javaFXModules = {
   lazy val osName = System.getProperty("os.name") match {
