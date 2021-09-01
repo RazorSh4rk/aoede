@@ -29,13 +29,13 @@ class UIController(
 
     def playButtonClicked = {
         if(!spotify.isPlaying) {
-            playButton.setImage(pauseImage)
-
             val song = spotify.play
             albumart.setImage(new Image(song.albumArtUrl))
             title.text = song.title
             artist.text = song.artist
             album.text = song.album
+            if(song.title != "Title")
+                playButton.setImage(pauseImage)
         } else {
             playButton.setImage(playImage)
             spotify.pause

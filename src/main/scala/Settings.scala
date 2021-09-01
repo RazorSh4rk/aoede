@@ -17,7 +17,8 @@ case class Settings(
     val authCode: String,
     val borderless: Boolean,
     val volumeSteps: Int,
-    val localServer: Boolean
+    val localServer: Boolean,
+    val defaultBrowser: String
 )
 
 object Settings {
@@ -34,7 +35,8 @@ object Settings {
             props.getProperty("authorization-code"),
             props.getProperty("borderless").toBoolean,
             props.getProperty("volume-steps").toInt,
-            props.getProperty("local-server").toBoolean
+            props.getProperty("local-server").toBoolean,
+            props.getProperty("default-browser")
         )
     }
     def update(key: String, value: String) = {

@@ -4,14 +4,64 @@ import com.wrapper.spotify.SpotifyApi
 import java.net.URI
 import com.wrapper.spotify.SpotifyHttpManager
 import scala.sys.process._
+import com.wrapper.spotify.exceptions.detailed.NotFoundException
 
 class SpotifyController {
     val settings = Settings.load
     val scope = "user-top-read,user-read-playback-position,user-read-playback-state,user-modify-playback-state,user-read-currently-playing,app-remote-control,playlist-read-private,user-library-read"
     var spotifyAPI: SpotifyApi = null
 
-    // fully set up
-    if(settings.RefreshToken != ""){
+    def getAuthCode = {
+        // start local server to fetch code
+        if(settings.localServer)
+            Server.start
+
+        // build default auth form handler
+        spotifyAPI = new SpotifyApi
+            .Builder()
+            .setClientId(settings.clientId)
+            .setClientSecret(settings.clientSecret)
+            .setRedirectUri(SpotifyHttpManager.makeUri(settings.redirectUrl))
+            .build    
+        
+        // get auth URL
+        val authUri = spotifyAPI
+            .authorizationCodeUri
+            .scope(scope)
+            .show_dialog(true)
+            .build
+            .execute
+        
+        println(s"AUTH URI: ${authUri.toString}")
+
+        // open it in browser
+        // this will redirect to the local server, that 
+        // updates the config file
+        s"${settings.defaultBrowser} ${authUri.toString}".!
+
+        // loop until code is in config
+        var _conf = Settings.load
+        while(_conf.authCode == "" || _conf.authCode == settings.authCode) {
+            Thread.sleep(500)
+            val _conf = Settings.load
+        }
+    }
+
+    def getTokens = {
+        val authCreds = spotifyAPI
+            .authorizationCode(settings.authCode)
+            .build
+            .execute
+            
+        spotifyAPI.setAccessToken(authCreds.getAccessToken)
+        Settings.update("access-token", authCreds.getAccessToken)
+            
+        spotifyAPI.setRefreshToken(authCreds.getRefreshToken)
+        Settings.update("refresh-token", authCreds.getRefreshToken)
+    }
+
+    def refreshTokenExpired = {
+        // build with saved tokens
         spotifyAPI = new SpotifyApi
             .Builder()
             .setClientId(settings.clientId)
@@ -21,51 +71,42 @@ class SpotifyController {
             .setAccessToken(settings.accessToken)
             .build
 
+        try {
+            spotifyAPI
+                .authorizationCodeRefresh
+                .build
+                .execute
+        } catch {
+            case t: Throwable => true
+        }
+
+        false
+    }
+
+    def refreshTokens = {
         val refreshReq = spotifyAPI
             .authorizationCodeRefresh
             .build
             .execute
-        
+
         spotifyAPI.setAccessToken(refreshReq.getAccessToken)
         Settings.update("access-token", refreshReq.getAccessToken)
 
         spotifyAPI.setRefreshToken(refreshReq.getRefreshToken)
         Settings.update("refresh-token", refreshReq.getRefreshToken)
-
-    } else {
-        spotifyAPI = new SpotifyApi
-            .Builder()
-            .setClientId(settings.clientId)
-            .setClientSecret(settings.clientSecret)
-            .setRedirectUri(SpotifyHttpManager.makeUri(settings.redirectUrl))
-            .build
-
-        // zero setup
-        if(settings.authCode == "") {
-            val authUriReq = spotifyAPI
-                .authorizationCodeUri
-                .scope(scope)
-                .show_dialog(true)
-                .build
-            val authUri = authUriReq.execute()
-            println(s"AUTH URI: ${authUri.toString}")
-            s"firefox ${authUri.toString}".!
-            System.exit(0)
-        // only need tokens
-        } else {
-            val authReq = spotifyAPI
-                .authorizationCode(settings.authCode)
-                .build
-            val authCreds = authReq.execute
-            spotifyAPI.setAccessToken(authCreds.getAccessToken)
-            Settings.update("access-token", authCreds.getAccessToken)
-
-            spotifyAPI.setRefreshToken(authCreds.getRefreshToken)
-            Settings.update("refresh-token", authCreds.getRefreshToken)
-        }
     }
 
-    var volume = 0
+    // INIT
+
+    // first launch
+    if(settings.authCode == "" || refreshTokenExpired) {
+        getAuthCode
+        getTokens
+    } else {
+        refreshTokens
+    }
+
+    // ---
 
     def isPlaying: Boolean = {
         val resp = spotifyAPI
@@ -117,11 +158,20 @@ class SpotifyController {
     }
 
     def play = {
-        spotifyAPI
-            .startResumeUsersPlayback
-            .build
-            .execute
-        getCurrentPlayback
+        try {
+            spotifyAPI
+                .startResumeUsersPlayback
+                .build
+                .execute
+            getCurrentPlayback
+        } catch {
+            case e: NotFoundException => 
+                println("No active playback device. Start music on your phone first.")
+            case e: NullPointerException => 
+                println("No active playback device. Start music on your phone first.")
+        }
+
+        Song("Title", "Artist", "Album", "images/sound-waves.png")
     }   
     def pause = {
         spotifyAPI

@@ -2,6 +2,7 @@ authorization-code=
 borderless=true
 refresh-token=
 client-secret=
+local-server=false
 redirect-url=http://144.202.12.141:9005
 access-token=
 client-id=
