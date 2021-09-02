@@ -28,4 +28,8 @@ object Server {
         println("Listening to auth code locally")
         handler.start
     }
+
+    def stop = {
+        handler.stop
+    }
 }

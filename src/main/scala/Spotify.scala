@@ -7,14 +7,18 @@ import scala.sys.process._
 import com.wrapper.spotify.exceptions.detailed.NotFoundException
 
 class SpotifyController {
-    val settings = Settings.load
+    var settings = Settings.load
     val scope = "user-top-read,user-read-playback-position,user-read-playback-state,user-modify-playback-state,user-read-currently-playing,app-remote-control,playlist-read-private,user-library-read"
     var spotifyAPI: SpotifyApi = null
 
     def getAuthCode = {
+        println("getting auth code")
+
         // start local server to fetch code
-        if(settings.localServer)
+        if(settings.localServer) {
+            println("starting local server")
             Server.start
+        }
 
         // build default auth form handler
         spotifyAPI = new SpotifyApi
@@ -42,12 +46,31 @@ class SpotifyController {
         // loop until code is in config
         var _conf = Settings.load
         while(_conf.authCode == "" || _conf.authCode == settings.authCode) {
-            Thread.sleep(500)
-            val _conf = Settings.load
+            Thread.sleep(2000)
+            _conf = Settings.load
+            println(s"reloaded settings, auth code: ${_conf.authCode}")
         }
+
+        println("stopping server")
+        Server.stop
+
+        println("reloading settings")
+        settings = Settings.load
+
+        println("reconstructing API")
+        spotifyAPI = new SpotifyApi
+            .Builder()
+            .setClientId(settings.clientId)
+            .setClientSecret(settings.clientSecret)
+            .setRedirectUri(SpotifyHttpManager.makeUri(settings.redirectUrl))
+            .setRefreshToken(settings.RefreshToken)
+            .setAccessToken(settings.accessToken)
+            .build
     }
 
     def getTokens = {
+        println("getting fresh tokens")
+
         val authCreds = spotifyAPI
             .authorizationCode(settings.authCode)
             .build
@@ -61,6 +84,7 @@ class SpotifyController {
     }
 
     def refreshTokenExpired = {
+        println("checking if tokens are expired")
         // build with saved tokens
         spotifyAPI = new SpotifyApi
             .Builder()
@@ -71,19 +95,23 @@ class SpotifyController {
             .setAccessToken(settings.accessToken)
             .build
 
+        var ret = false
         try {
             spotifyAPI
                 .authorizationCodeRefresh
                 .build
                 .execute
         } catch {
-            case t: Throwable => true
+            case t: Throwable => ret = true
         }
 
-        false
+        println(s"tokens expired: $ret")
+
+        ret
     }
 
     def refreshTokens = {
+        println("refreshing tokens")
         val refreshReq = spotifyAPI
             .authorizationCodeRefresh
             .build
@@ -100,9 +128,11 @@ class SpotifyController {
 
     // first launch
     if(settings.authCode == "" || refreshTokenExpired) {
+        println("no authcode or expired tokens")
         getAuthCode
         getTokens
     } else {
+        println("all is fine, refreshing tokens")
         refreshTokens
     }
 
@@ -158,20 +188,21 @@ class SpotifyController {
     }
 
     def play = {
+        var ret: Song = null
         try {
             spotifyAPI
                 .startResumeUsersPlayback
                 .build
                 .execute
-            getCurrentPlayback
+            ret = getCurrentPlayback
         } catch {
-            case e: NotFoundException => 
+            case e: Throwable => {
                 println("No active playback device. Start music on your phone first.")
-            case e: NullPointerException => 
-                println("No active playback device. Start music on your phone first.")
+                ret = Song("Title", "Artist", "Album", "images/sound-waves.png")
+            }
         }
 
-        Song("Title", "Artist", "Album", "images/sound-waves.png")
+        ret
     }   
     def pause = {
         spotifyAPI
