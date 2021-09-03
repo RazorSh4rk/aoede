@@ -7,4 +7,4 @@ access-token=
 local-server=true
 client-id=
 volume-steps=5
-default-browser=firefox
+default-browser=midori

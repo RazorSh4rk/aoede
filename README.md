@@ -32,7 +32,7 @@ I use ScalaFX, ScalaFXML and Undertow for the app, big thanks to the maintainers
 
 - Register a Spotify account
 - Pay for premium :)))
-- Go to the [https://developer.spotify.com/dashboard/login](developer dashboard)
+- Go to the [developer dashboard](https://developer.spotify.com/dashboard/login)
 - Create an app
 - Plug `client-id` and `client-secret` into your `application.properties` file
 - Add a redirect URL in the dashboard, and plug it into the file. If you want automated setup, leave `local-server` on true and use `http://localhost:9001/` (it's over 9k), but you have no idea if my code is stealing your credentials (it's not). You can also use `http://144.202.12.141:9005` but I can't guarantee that I won't forget to pay Vultr for the VPS. Alternatively, `pip install flask && python app.py` to run a local server.
