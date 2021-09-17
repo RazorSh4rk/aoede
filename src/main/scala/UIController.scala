@@ -25,7 +25,7 @@ class UIController(
 ) {
     val pauseImage = new Image("images/pause-button.png")
     val playImage = new Image("images/play-button.png")
-    val spotify = new SpotifyController
+    val spotify = UIControllerCompanion.spotify
 
     def playButtonClicked = {
         if(!spotify.isPlaying) {
@@ -73,4 +73,18 @@ class UIController(
     def hideMenuButtonCLicked = {
         menuPage.setVisible(false)
     }
+}
+
+object UIControllerCompanion {
+    val spotify = new SpotifyController
+
+    def playButtonClicked = {
+        if(!spotify.isPlaying) 
+            spotify.play
+        else spotify.pause
+    }
+
+    def prevButtonClicked = spotify.prevTrack
+
+    def nextButtonClicked = spotify.nextTrack
 }
